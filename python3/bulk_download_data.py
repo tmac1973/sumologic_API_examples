@@ -118,10 +118,10 @@ def process_arguments():
     parser = argparse.ArgumentParser(description='Download data between a range of datas for a selection of source categories.')
     parser.add_argument('-key', required=True, help='The API key for the org')
     parser.add_argument('-secret', required=True, help='The API secret for the org')
-    parser.add_argument('-deployment', required=True, help='The deployment for the org (e.g. us2, ca, dub, etc.')
+    parser.add_argument('-deployment', required=True, help='The deployment for the org (e.g. us2, ca, dub, etc.)')
     parser.add_argument('-startDate', required=True, help='The start date. YYYY-MM-DD')
     parser.add_argument('-endDate', required=True, help='The end date YYYY-MM-DD')
-    parser.add_argument('-increment', required=True, help='The increment, in hours')
+    parser.add_argument('-increment', required=True, help='The time increment, in hours')
     parser.add_argument('-categoryFile', required=True, help='File that contains a list of source categories, one per line.')
     args = parser.parse_args()
     return args
