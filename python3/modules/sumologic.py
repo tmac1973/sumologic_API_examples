@@ -212,7 +212,7 @@ class SumoLogic(object):
     # Search API
 
     def search_job(self, query, fromTime=None, toTime=None, timeZone='UTC', byReceiptTime=False):
-        data = {'query': str(query), 'from': str(fromTime), 'to': str(toTime), 'timeZone': str(timeZone), 'byReceiptTime': str(byReceiptTime)}
+        data = {'query': str(query), 'from': str(fromTime), 'to': str(toTime), 'timeZone': str(timeZone), 'byReceiptTime': str(byReceiptTime).lower()}
         r = self.post('/v1/search/jobs', data)
         return r.json()
 
@@ -220,7 +220,7 @@ class SumoLogic(object):
         r = self.get('/v1/search/jobs/' + str(search_job['id']))
         return r.json()
 
-    def search_job_records_sync(self, query, fromTime=None, toTime=None, timeZone=None, byReceiptTime=None):
+    def search_job_records_sync(self, query, fromTime=None, toTime=None, timeZone=None, byReceiptTime=False):
         searchjob = self.search_job(query, fromTime=fromTime, toTime=toTime, timeZone=timeZone, byReceiptTime=byReceiptTime)
         status = self.search_job_status(searchjob)
         numrecords = status['recordCount']
@@ -242,7 +242,7 @@ class SumoLogic(object):
         else:
             return status
 
-    def search_job_messages_sync(self, query, fromTime=None, toTime=None, timeZone=None, byReceiptTime=None):
+    def search_job_messages_sync(self, query, fromTime=None, toTime=None, timeZone=None, byReceiptTime=False):
         searchjob = self.search_job(query, fromTime=fromTime, toTime=toTime, timeZone=timeZone, byReceiptTime=byReceiptTime)
         status = self.search_job_status(searchjob)
         nummessages = status['messageCount']
