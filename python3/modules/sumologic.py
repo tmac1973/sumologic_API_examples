@@ -543,14 +543,15 @@ class SumoLogic(object):
     def get_content(self, path):
         return self.get_content_by_path(path)
 
-    def get_content_by_path(self, item_path):
+    def get_content_by_path(self, item_path, adminmode=False):
         # item_path should start with /Library and use the user's email address if referencing a user home dir
         # firstname + :space: + lastname will not work here, even though that's how it's displayed in the UI
         # YES: "/Library/Users/user@demo.com/someItemOrFolder" could be a valid path
         # NO: "/Library/Users/Demo User/someItemOrFolder" is not a valid path because user first/last names are not
         # unique identifiers
+        headers = {'isAdminMode': str(adminmode).lower()}
         params = {'path': str(item_path)}
-        r = self.get('/v2/content/path', params=params)
+        r = self.get('/v2/content/path', params=params, headers=headers)
         return r.json()
 
     def get_item_path(self, item_id):
@@ -990,12 +991,8 @@ class SumoLogic(object):
         r = self.get('/v1/monitors/' + str(item_id))
         return r.json()
 
-    def update_monitor(self, item_id, name, version, type, description=''):
-        data = {'name': str(name),
-                'description': str(description),
-                'version': int(version),
-                'type': str(type)}
-        r = self.put('/v1/monitors/' + str(item_id), data)
+    def update_monitor(self, item_id, monitor):
+        r = self.put('/v1/monitors/' + str(item_id), monitor)
         return r.json()
 
     def delete_monitor(self, item_id):
@@ -1082,29 +1079,37 @@ class SumoLogic(object):
 
     # Lookup table API
     def create_lookup_table(self, content):
-        return self.post('/v1/lookupTables', params=content)
-    
-    def get_lookup_table(self, id):
-        return self.get('/v1/lookupTables/%s' % id)
-    
-    def edit_lookup_table(self, id, content):
-        return self.put('/v1/lookupTables/%s' % id, params=content)
+        r = self.post('/v1/lookupTables', params=content)
+        return r.json()
 
-    def delete_lookup_table(self, id):
-        return self.delete('/v1/lookupTables/%s' % id)
+    def get_lookup_table(self, table_id):
+        r = self.get('/v1/lookupTables/%s' % table_id)
+        return r.json()
+    
+    def edit_lookup_table(self, table_id, content):
+        r = self.put('/v1/lookupTables/%s' % table_id, params=content)
+        return r.json()
 
-    def upload_csv_lookup_table(self, id, file_path, file_name, merge='false'):
+    def delete_lookup_table(self, table_id):
+        r = self.delete('/v1/lookupTables/%s' % table_id)
+        return r.json()
+
+    def upload_csv_lookup_table(self, table_id, file_path, file_name, merge='false'):
         params={'file_name': file_name,
                 'full_file_path': os.path.join(file_path, file_name),
                 'merge': merge
                 }
-        return self.post_file('/v1/lookupTables/%s/upload' % id, params)
-    
-    def check_lookup_status(self, id):
-        return self.get('/v1/lookupTables/jobs/%s/status' % id)
+        r = self.post_file('/v1/lookupTables/%s/upload' % table_id, params)
+        return r.json()
 
-    def empty_lookup_table(self, id):
-        return self.post('/v1/lookupTables/%s/truncate'% id, params=None)
+    def check_lookup_status(self, table_id):
+        r = self.get('/v1/lookupTables/jobs/%s/status' % table_id)
+        return r.json()
+
+    def empty_lookup_table(self, table_id):
+        r = self.post('/v1/lookupTables/%s/truncate'% table_id, params=None)
+        return r.json()
     
-    def update_lookup_table(self, id, content):
-        return self.put('/v1/lookupTables/%s/row' % id, params=content)
+    def update_lookup_table(self, table_id, content):
+        r = self.put('/v1/lookupTables/%s/row' % table_id, params=content)
+        return r.json()
