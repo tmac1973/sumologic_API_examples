@@ -109,9 +109,9 @@ def process_arguments():
     parser.add_argument('-key', required=True, help='The API key for the org')
     parser.add_argument('-secret', required=True, help='The API secret for the org')
     parser.add_argument('-deployment', required=True, help='The deployment for the org (e.g. us2, ca, dub, etc.)')
-    parser.add_argument('-monitorFolder', required=True, help='The source folder for the log monitors to convert')
-    parser.add_argument('-destFolder', required=True, help='The location to put the scheduled searches (absolute path please')
-    parser.add_argument('-adminMode', help='Whether to use adminmode when creating searches (required to write to admin recommended', action='store_true')
+    parser.add_argument('-monitorFolder', required=True, help='The source folder for the log monitors to convert. Should start with "/Monitor"')
+    parser.add_argument('-destFolder', required=True, help='The location to put the scheduled searches. Should start with "/Library"')
+    parser.add_argument('-adminMode', help='Whether to use adminmode when creating searches (required to write to folders other than your own.)', action='store_true')
     args = parser.parse_args()
     return args
 
