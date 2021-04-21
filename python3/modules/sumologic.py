@@ -337,7 +337,7 @@ class SumoLogic(object):
 
     def delete_collector(self, collector_id):
         r = self.delete('/v1/collectors/' + str(collector_id))
-        return r.json()
+        return r
 
     def get_sources(self, collector_id, limit=None, offset=None):
         params = {'limit': limit, 'offset': offset}

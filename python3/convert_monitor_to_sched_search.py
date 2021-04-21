@@ -20,6 +20,11 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+
+# This script converts log monitors to scheduled searches however it makes some assumptions. It will only convert the
+# first alert condition from a monitor, so if you have Critical and Warning setup the Warning won't get converted.
+# Feel free to improve the script.
+
 import json
 from modules.sumologic import SumoLogic
 from logzero import logger
@@ -42,8 +47,8 @@ def return_scheduled_search_template():
                 "viewName": ""
             },
             "searchSchedule": {
-                "cronExpression": "17 * * * * ? *",
-                "displayableTimeRange": "-5m",
+                "cronExpression": "0 0/15 * * * ? *",
+                "displayableTimeRange": "-15m",
                 "muteErrorEmails": false,
                 "notification": {
                     "includeCsvAttachment": false,
@@ -57,13 +62,13 @@ def return_scheduled_search_template():
                 "parameters": [],
                 "parseableTimeRange": {
                     "from": {
-                        "relativeTime": "-5m",
+                        "relativeTime": "-15m",
                         "type": "RelativeTimeRangeBoundary"
                     },
                     "to": null,
                     "type": "BeginBoundedTimeRange"
                 },
-                "scheduleType": "RealTime",
+                "scheduleType": "15Minutes",
                 "threshold": {
                     "count": 0,
                     "operator": "gt",
