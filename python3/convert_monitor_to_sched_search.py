@@ -126,7 +126,9 @@ def convert(monitor, scheduled_search_folder_id, sumo_org, adminmode=False):
         monitor_details = sumo_org.get_monitor(monitor['id'])
         if monitor_details['monitorType'] == 'Logs':
             scheduled_search_template = return_scheduled_search_template()
-            scheduled_search_template['name'] = monitor_details['name']
+            scheduled_search_template['name'] = str(monitor_details['name'])
+            scheduled_search_template['name'].replace('[', '(')
+            scheduled_search_template['name'].replace(']', ')')
             scheduled_search_template['description'] = monitor_details['description']
             logger.info(f"Creating scheduled search from monitor name: {monitor_details['name']} Query: {monitor_details['queries'][0]['query']}")
             scheduled_search_template['search']['queryText'] = monitor_details['queries'][0]['query']
