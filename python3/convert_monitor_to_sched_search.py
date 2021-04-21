@@ -139,6 +139,7 @@ def convert(monitor, scheduled_search_folder_id, sumo_org, adminmode=False):
                 scheduled_search_template['searchSchedule']['notification']['toList'].append(recipient)
             results = sumo_org.import_content_job(scheduled_search_folder_id, scheduled_search_template, adminmode=adminmode)
             logger.info(f"Wrote scheduled search {scheduled_search_template['name']}")
+            print(json.dumps(scheduled_search_template, indent=4))
             logger.info(f"Disabling monitor: {monitor_details['name']}")
             monitor_details['isDisabled'] = True
             monitor_details['type'] = 'MonitorsLibraryMonitorUpdate'
@@ -199,7 +200,7 @@ def main():
     dest_folder = sumo_org.get_content_by_path(arguments.destFolder, adminmode=arguments.adminMode)
     dest_folder_id = dest_folder['id']
     logger.info(f"Destination folder {arguments.destFolder} has id {dest_folder_id}")
-    parallel_runner(monitors['children'], dest_folder_id, sumo_org, adminmode=arguments.adminMode)
+    serial_runner(monitors['children'], dest_folder_id, sumo_org, adminmode=arguments.adminMode)
 
 
 if __name__ == "__main__":
