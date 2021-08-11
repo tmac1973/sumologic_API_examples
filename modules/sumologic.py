@@ -30,15 +30,18 @@ def backoff(func):
             try:
                 return func(*args, **kwargs)
             except Exception as e:
-                lastException=e
-                tries += 1
-                logger.debug("Rate limited, sleeping for {0}s".format(delay))               
-            if tries >= MAX_TRIES:
-                logger.debug("Rate limited function still failed after {0} retries.".format(MAX_TRIES))
-                raise lastException
+                if e.response.status_code == 429:  # rate limited
+                    lastException = e
+                    tries += 1
+                    logger.debug("Rate limited, sleeping for {0}s".format(delay))
+                    print(str(e))
+                else:
+                    raise
             logger.debug(f"delay: {delay} attempts: {tries}")
             time.sleep(delay)
             delay = delay * 2
+        logger.debug("Rate limited function still failed after {0} retries.".format(MAX_TRIES))
+        raise lastException
     return limited
 
 
@@ -741,22 +744,30 @@ class SumoLogic(object):
             user['roles'].append(role)
         return user
 
-    def create_user(self, first_name, last_name, email, roleIDs):
-        data = {'firstName': str(first_name), 'lastName': str(last_name), 'email': str(email), 'roleIds': roleIDs}
+    def create_user(self, data):
         r = self.post('/v1/users', data)
         return r.json()
 
-    def update_user(self, id, first_name, last_name, email, roleIDs):
+    def create_user_by_field(self, first_name, last_name, email, roleIDs):
         data = {'firstName': str(first_name), 'lastName': str(last_name), 'email': str(email), 'roleIds': roleIDs}
+        r = self.create_user(data)
+        return r
+
+    def update_user(self, user_id, data):
         r = self.put('/v1/users' + str(id), data)
         return r.json()
 
-    def delete_user(self, id, transferTo=None):
+    def update_user_by_field(self, user_id, first_name, last_name, roleIDs):
+        data = {'firstName': str(first_name), 'lastName': str(last_name),  'roleIds': roleIDs}
+        r = self.update_user(user_id, data)
+        return r
+
+    def delete_user(self, user_id, transferTo=None):
         if transferTo:
             params = {'transferTo': str(transferTo)}
         else:
             params = None
-        r = self.delete('/v1/users/' + str(id), params=params)
+        r = self.delete('/v1/users/' + str(user_id), params=params)
         return r
 
     def change_user_email(self, id, email):
