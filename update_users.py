@@ -63,13 +63,14 @@ def main():
         user_id = user['id']
         first_name = user['firstName']
         last_name = user['lastName']
+        is_active = user['isActive']
         email = user['email']
         role_ids = user['roleIds']
 
         if not last_name:
             try:
                 last_name = email
-                result = sumo.update_user_by_field(user_id, first_name, last_name, role_ids)
+                result = sumo.update_user_by_field(user_id, first_name, last_name, is_active, role_ids)
                 print(f'Updated user for email: {email}')
             except Exception as e:
                 print(f"Something went wrong: {str(e)}")
