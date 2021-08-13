@@ -754,7 +754,7 @@ class SumoLogic(object):
         return r
 
     def update_user(self, user_id, data):
-        r = self.put('/v1/users' + str(user_id), data)
+        r = self.put('/v1/users/' + str(user_id), data)
         return r.json()
 
     def update_user_by_field(self, user_id, first_name, last_name, is_active, role_ids):
