@@ -34,7 +34,6 @@ def backoff(func):
                     lastException = e
                     tries += 1
                     logger.debug("Rate limited, sleeping for {0}s".format(delay))
-                    print(str(e))
                 else:
                     raise
             logger.debug(f"delay: {delay} attempts: {tries}")
