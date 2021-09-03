@@ -72,9 +72,9 @@ def process_arguments():
 def find_orphaned_content(user_id, folder_id, sumo):
     orphaned_content = []
     if folder_id is None:
-        folder = sumo.get_admin_folder_sync()
+        folder = sumo.get_admin_folder_sync(adminmode=True)
     else:
-        folder = sumo.get_folder(folder_id)
+        folder = sumo.get_folder(folder_id, adminmode=True)
 
     for child in folder['children']:
         if child['itemType'] == 'Folder':

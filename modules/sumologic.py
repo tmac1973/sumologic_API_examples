@@ -526,7 +526,7 @@ class SumoLogic(object):
         r = self.get('/v2/content/folders/adminRecommended/' + str(job_id) + '/status')
         return r.json()
 
-    def get_admin_folder(self, adminmode=False):
+    def get_admin_folder(self, adminmode=True):
         headers = {'isAdminMode': str(adminmode).lower()}
         r = self.get('/v2/content/folders/adminRecommended', headers=headers)
         return r.json()
@@ -535,7 +535,7 @@ class SumoLogic(object):
         r = self.get('/v2/content/folders/adminRecommended/' + str(job_id) + '/result')
         return r.json()
 
-    def get_admin_folder_sync(self, adminmode=False):
+    def get_admin_folder_sync(self, adminmode=True):
         r = self.get_admin_folder(adminmode=adminmode)
         job_id = str(r['id'])
         status = self.get_admin_folder_job_status(job_id)
