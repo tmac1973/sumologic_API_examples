@@ -52,7 +52,7 @@ def endpoint_lookup(deployment):
                  'mum': 'https://api.in.sumologic.com/api',
                  'fed': 'https://api.fed.sumologic.com/api',
                  }
-    return endpoints[deployment]
+    return endpoints[str(deployment).lower()]
 
 
 def download_and_write(start_time: datetime.datetime,

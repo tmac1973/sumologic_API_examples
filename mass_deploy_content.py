@@ -52,7 +52,7 @@ def endpoint(deployment):
                  'mum': 'https://api.in.sumologic.com/api',
                  'fed': 'https://api.fed.sumologic.com/api',
                  }
-    return endpoints[deployment]
+    return endpoints[str(deployment).lower()]
 
 
 def export_content(key: str,
