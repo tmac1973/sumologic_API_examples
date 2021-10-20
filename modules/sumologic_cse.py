@@ -194,6 +194,54 @@ class SumoLogicCSE(object):
         r.raise_for_status()
         return r
 
+    def get_rules(self, query, limit=50, offset=0, expand=[]):
+        params = {'q': str(query),
+                  'limit': int(limit),
+                  'offset': int(offset),
+                  'expand': expand}
+        r = self.get('/sec/v1/rules', params=params)
+        return r.json()
+
+    def get_rules_sync(self, query, limit=50, expand=[]):
+        offset = 0
+        results = []
+        while True:
+            r = self.get_rules(query, limit=limit, offset=offset, expand=expand)
+            offset = offset + limit
+            results = results + r['data']['objects']
+            if not r['data']['hasNextPage']:
+                break
+        return results
+
+    def get_rule(self, item_id: str, expand=[]):
+        params = {'expand': expand}
+        r = self.get('/sec/v1/rules/' + str(item_id), params=params)
+        return r.json()['data']
+
+    def delete_rule(self, item_id):
+        r = self.delete('/sec/v1/rules/' + str(item_id))
+        return r
+
+    def create_aggregation_rule(self, item):
+        r = self.post('/sec/v1/rules/aggregation', item)
+        return r.json()
+
+    def create_chain_rule(self, item):
+        r = self.post('/sec/v1/rules/chain', item)
+        return r.json()
+
+    def create_match_rule(self, item):
+        r = self.post('/sec/v1/rules/match', item)
+        return r.json()
+
+    def create_templated_match_rule(self, item):
+        r = self.post('/sec/v1/rules/templated', item)
+        return r.json()
+
+    def create_threshold_rule(self, item):
+        r = self.post('/sec/v1/rules/threshold', item)
+        return r.json()
+
     def get_threat_intel_indicators(self):
         r = self.get('/threat-intel-indicators')
         return r.json()
