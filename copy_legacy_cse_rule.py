@@ -22,6 +22,8 @@
 
 # This works for legacy CSE implementations that have a separate API. If your instance has a unified API
 # you'll need to modify this script
+import json
+
 from modules.sumologic_cse import SumoLogicCSE
 import argparse
 
@@ -29,8 +31,8 @@ def process_arguments():
     parser = argparse.ArgumentParser(description="Copy a CSE Rule between orgs")
     parser.add_argument('-sourcekey', required=True, help='API key for the source')
     parser.add_argument('-sourceurl', required=True, help='URL for the source')
-    parser.add_argument('-destkey', required=True, help='API key for the destination')
-    parser.add_argument('-desturl', required=True, help='URL for the destination')
+    #parser.add_argument('-destkey', required=True, help='API key for the destination')
+    #parser.add_argument('-desturl', required=True, help='URL for the destination')
     parser.add_argument('-rule', required=True, help='The Rule ID')
     args = parser.parse_args()
     return args
@@ -53,9 +55,10 @@ def main():
     dest_cse = SumoLogicCSE(arguments.destkey, arguments.desturl)
 
     exported_rule = source_cse.get_rule(str(arguments.rule))
-    print(f"Exported rule: {exported_rule}")
+    #print(f"Exported rule: {json.dumps(exported_rule)}")
+    rule_type = exported_rule['ruleType']
+    #print(f"Rule type: {rule_type}")
     processed_rule = remove_json_keys(exported_rule)
-    rule_type = processed_rule['ruleType']
     if processed_rule['fields']['scoreMapping']['mapping'] is None:
         processed_rule['fields']['scoreMapping']['mapping'] = []
     if rule_type == 'templated match':
@@ -68,6 +71,7 @@ def main():
         result = dest_cse.create_threshold_rule(processed_rule)
     elif rule_type == 'aggregation':
         result = dest_cse.create_aggregation_rule(processed_rule)
+
 
 if __name__ == "__main__":
     main()
