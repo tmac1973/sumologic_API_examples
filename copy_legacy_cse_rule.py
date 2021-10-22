@@ -31,8 +31,8 @@ def process_arguments():
     parser = argparse.ArgumentParser(description="Copy a CSE Rule between orgs")
     parser.add_argument('-sourcekey', required=True, help='API key for the source')
     parser.add_argument('-sourceurl', required=True, help='URL for the source')
-    #parser.add_argument('-destkey', required=True, help='API key for the destination')
-    #parser.add_argument('-desturl', required=True, help='URL for the destination')
+    parser.add_argument('-destkey', required=True, help='API key for the destination')
+    parser.add_argument('-desturl', required=True, help='URL for the destination')
     parser.add_argument('-rule', required=True, help='The Rule ID')
     args = parser.parse_args()
     return args
