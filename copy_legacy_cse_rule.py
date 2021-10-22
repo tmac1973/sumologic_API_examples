@@ -23,7 +23,7 @@
 # This works for legacy CSE implementations that have a separate API. If your instance has a unified API
 # you'll need to modify this script
 import json
-
+#
 from modules.sumologic_cse import SumoLogicCSE
 import argparse
 
