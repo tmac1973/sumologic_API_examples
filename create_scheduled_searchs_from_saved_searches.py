@@ -151,7 +151,7 @@ def main():
                 #saved_search_content['searchSchedule'] = return_every_15_schedule()
                 saved_search_content['searchSchedule']['notification']['toList'].append(str(arguments.email))
                 print(f'Creating scheduled search for: {saved_search_content["name"]}')
-                sumo_org.import_content_job_sync(dest_folder_id, saved_search_content)
+                sumo_org.import_content_job_sync(dest_folder_id, saved_search_content, adminmode=arguments.adminMode)
 
 
 if __name__ == "__main__":
