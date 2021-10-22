@@ -53,6 +53,7 @@ def main():
     dest_cse = SumoLogicCSE(arguments.destkey, arguments.desturl)
 
     exported_rule = source_cse.get_rule(str(arguments.rule))
+    print(f"Exported rule: {exported_rule}")
     processed_rule = remove_json_keys(exported_rule)
     rule_type = processed_rule['ruleType']
     if processed_rule['fields']['scoreMapping']['mapping'] is None:
