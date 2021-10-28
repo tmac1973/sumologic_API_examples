@@ -45,7 +45,8 @@ def remove_json_keys(json):
                    'scoreMappingOverride', 'summaryExpressionOverride', 'hasOverride', 'nameOverride',
                    'isPrototypeOverride', 'tagsOverride', 'scoreOverride', 'limitOverride', 'windowSizeOverride',
                    'groupByFieldsOverride', 'descriptionOverride', 'windowSizeName', 'ruleDescription']
-    json['windowSize'] = json['windowSizeName']
+    if 'windowSize' in json and 'windowSizeName' in json:
+        json['windowSize'] = json['windowSizeName']
     for remove_key in remove_keys:
         if remove_key in json:
             del json[remove_key]
