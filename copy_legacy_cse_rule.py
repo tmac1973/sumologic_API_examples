@@ -43,7 +43,9 @@ def remove_json_keys(json):
                    'ruleSource', 'ruleType', 'signalCount07d', 'signalCount24h', 'status',
                    'descriptionExpressionOverride', 'entitySelectorsOverride', 'nameExpressionOverride',
                    'scoreMappingOverride', 'summaryExpressionOverride', 'hasOverride', 'nameOverride',
-                   'isPrototypeOverride', 'tagsOverride']
+                   'isPrototypeOverride', 'tagsOverride', 'scoreOverride', 'limitOverride', 'windowSizeOverride',
+                   'groupByFieldsOverride', 'descriptionOverride', 'windowSizeName', 'ruleDescription']
+    json['windowSize'] = json['windowSizeName']
     for remove_key in remove_keys:
         if remove_key in json:
             del json[remove_key]
@@ -59,8 +61,9 @@ def main():
     rule_type = exported_rule['ruleType']
     #print(f"Rule type: {rule_type}")
     processed_rule = remove_json_keys(exported_rule)
-    if processed_rule['fields']['scoreMapping']['mapping'] is None:
-        processed_rule['fields']['scoreMapping']['mapping'] = []
+    print(json.dumps(processed_rule, indent=3))
+#    if processed_rule['fields']['scoreMapping']['mapping'] is None:
+#        processed_rule['fields']['scoreMapping']['mapping'] = []
     if rule_type == 'templated match':
         result = dest_cse.create_templated_match_rule(processed_rule)
     elif rule_type == 'match':
